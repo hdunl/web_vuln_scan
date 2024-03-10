@@ -15,13 +15,12 @@ end
 
 def scan_url(url, payload)
   uri = URI(url)
-  # Properly append payload to the query string
   query_delimiter = uri.query ? '&' : ''
   uri.query = [uri.query, URI.encode_www_form_component(payload)].compact.join(query_delimiter)
 
   response = send_request(uri, payload)
   if response.is_a?(String)
-    response # Return the error message if an exception occurred
+    response
   else
     response.body.include?(payload) ? "Vulnerable" : "Not Vulnerable"
   end
